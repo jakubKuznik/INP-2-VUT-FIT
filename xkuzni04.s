@@ -27,21 +27,28 @@ main:
 	; k = 11 ASCI	
 	; u = 21 ASCI
 
+	;xkuzni04
+	;x + 11 = i
+	;k - 21 = p
+	;u + 11 = f
+	;z - 21 = e
+	;n + 11 = y
+	;i - 21 = n
 
 	addi r19, r0, 21	; index v abecede meho pismena u
 
 ;---------------------------------------------------------------------
- loop:
+
 
 ;!!!!!!!!!!!!!!!! LICHY INDEX !!!!!!!!!!!!!!!!!!!!!!!!!
+loop:
+	lb r23, login(r20)	; load byte from login
 
-	lb r23, login(r20)	;načte bajt z adresy login index 0	
-
-;########## NUMBER CHECK   	; if number go to :number
+;########## NUMBER CHECK   	; if number < 97 go to :number
 	addi r16, r0, 0
 	addi r15, r0, 97        ; asci value where alpha characters start 
-	sgt r16, r15, r23       ; porovna aktualni znak a zjisti jestli je pismeno nebo cislo
-	bnez r16, num		; pokud to je cislo skoci na navesti cislo
+	sgt r16, r15, r23       ; Check if character is number. If true end program
+	bnez r16, num		; if number jump to num 
 ;#########################
 	nop	
 	nop	
@@ -103,9 +110,9 @@ continue_under:
 overflow_under:
 	addi r15, r0, 97
 	sub r15, r15, r19
-	
 	addi r19, r0, 122
 	sub r19, r19, r15	
+	addi r19, r19, 1
 	sb cipher(r20), r19     ; uloží bajt do cipher na index 
 	j continue_under
 
@@ -115,11 +122,12 @@ overflow_over:
 	sub r19, r19, r15
 	addi r15, r0, 97	
 	add r19, r19, r15
+	subi r19, r19, 1
 	sb cipher(r20), r19     ; uloží bajt do cipher na index 
 	j continue
 
 num:		
-	addi r19, r0, 0x00
+	add r19, r0, r0
 	sb cipher(r20), r19     ; uloží bajt do cipher na index 0
 
 
